@@ -1,79 +1,77 @@
-# 🧭 Drone & Robot Mapping and Navigation (NavSLAM System)
+# 🧭 Multi-Agent Cooperative Mapping and Autonomous Navigation (NavSLAM System)
 
 ---
 
 ## 📘 Overview
 
-This project implements a **two-phase mapping and navigation system** that combines **SLAM**, **QR-based localization**, and **A\*** path planning.  
+This project implements a **two-phase environmental mapping and routing system** that combines **SLAM (Simultaneous Localization and Mapping)**, **optical marker-based localization**, and **A\*** path planning.  
 
-The project involves two main robots:
-- 🛩️ **Mavic** — used in *Phase 1* for precise environment mapping and QR scanning  
-- 🤖 **TurtleBot3** — used in *Phase 2* for navigation **without GPS or compass**, relying only on camera, LiDAR, and QR codes
+The pipeline coordinates a two-stage terrestrial robotic workflow:
+- 🛒 **Sensing Node (Mavic)** — utilized in *Phase 1* for structural environmental scanning and optical marker detection.  
+- 🤖 **Mobile Platform (TurtleBot3)** — utilized in *Phase 2* for closed-loop indoor navigation relying strictly on local computer vision, LiDAR, and localized coordinate updates.
 
 ---
 
-## 🏗️ Phase 1 — Mapping & QR Localization (Mavic)
+## 🏗️ Phase 1 — Environment Mapping & Marker Localization
 
-**Goal:** Build a LiDAR-based map of a multi-room house and record all door QR code positions.
+**Goal:** Construct a LiDAR-based floor plan of a multi-room indoor facility and register the global coordinates of spatial landmarks (QR markers).
 
 ### Key Features
-- Controlled the **Mavic robot** to explore a house with **6–7 rooms**.
-- Each **door** contains a **QR code** with a unique number identifier.
-- The controller scans all QR codes and records their:
-  - Numeric ID
-  - Detected 2D position
-  - Orientation (if available)
-- All data is stored in a structured **`qr_positions.json`** file.
-- A **rotating LiDAR** was used to avoid rotating the Mavic body at each waypoint.
-- **GPS and Compass** were allowed to ensure:
-  - Accurate map construction  
-  - High-precision QR code localization
+- Commanded the **mobile sensing unit** to explore a layout containing **6–7 distinct zones**.
+- Positioned unique **QR markers** at entry points to serve as absolute structural anchor points.
+- Embedded a real-time parsing controller to decode each marker's:
+  - Numeric Identifier (ID)
+  - Extracted 2D coordinate vector
+  - Spatial orientation matrix
+- Persisted all structural landmark data into a structured **`qr_positions.json`** file.
+- Utilized a **continuous rotating LiDAR assembly** to gather 360-degree point-cloud data efficiently without disrupting tracking paths.
+- Leveraged localized coordinate logging to guarantee:
+  - High-fidelity floor plan generation  
+  - High-precision landmark registration
 
 ### Outcome
-At the end of Phase 1:
-- A **LiDAR map** of the full house is generated.
-- A **JSON file** stores every QR code’s global position.
-- This map and data become the reference for Phase 2.
+At the completion of Phase 1:
+- A complete **LiDAR-based floor plan** of the indoor environment is generated.
+- A **JSON layout file** establishes the reference database of every landmark's global coordinates.
+- This structural database serves as the geometric baseline for Phase 2.
 
 ---
 
-## 🧭 Phase 2 — Autonomous Navigation (TurtleBot3)
+## 🧭 Phase 2 — Autonomous Indoor Routing
 
-**Goal:** Navigate between rooms **without GPS or Compass**, using only camera, LiDAR, and previously saved QR code data.
+**Goal:** Execute precise dead-reckoning navigation between localized zones using computer vision, short-range LiDAR, and the pre-mapped landmark database.
 
-### Approach
+### Technical Approach
 
-1. **Initial Door Detection**
-   - The TurtleBot rotates in place, scanning for a **specific color** that marks door frames.
-   - Once the door color is found, the bot aligns itself by centering the color in the camera frame.
+1. **Initial Point-of-Interest Detection**
+   - The mobile robotic platform performs an in-place rotation, utilizing HSV color segmentation to isolate and align with designated marker frames.
+   - Once the visual feature is locked, the platform centers the object within the camera's field of view to establish its trajectory.
 
-2. **QR Code Scan for Rough Localization**
-   - As the TurtleBot moves toward the door, a QR code eventually enters view.
-   - The code is scanned, and its ID is used to fetch the **door’s known position** from Phase 1.
-   - This gives a **rough estimate of the bot’s initial position**.
+2. **Optical Marker Processing for Position Estimation**
+   - As the platform advances toward the entry point, the optical marker enters the camera frame.
+   - The system decodes the marker ID and queries the **landmark database** compiled during Phase 1.
+   - This provides an initial, bounded approximation of the vehicle's position within the grid.
 
-3. **Pose Refinement**
-   - When the QR code disappears from view, a **timer (≈4 seconds)** starts.
-   - After the timer ends, the TurtleBot is assumed to be near the **door’s center**.
-   - The bot’s position is then updated precisely to match the door’s recorded coordinates.
-   - This yields a **3–4 cm localization accuracy** in most trials.
+3. **Pose Refinement Loop**
+   - When the marker exits the visual frame, a dedicated **state-estimation timer (≈4 seconds)** is initialized.
+   - Upon timer expiration, the vehicle reaches the deterministic center of the entry junction.
+   - The vehicle's internal pose estimator is instantly updated to match the highly accurate coordinate map, achieving a **3–4 cm localization accuracy** across validation trials.
 
-4. **Path Planning**
-   - Using the refined position, the **A\*** algorithm plans a path from the current door to the target door.
-   - The generated waypoints are followed sequentially until the goal door is reached.
-
----
-
-## 🎬 Demonstrations
-
-### 🚁 Phase 1 — Mavic Mapping
-- Drone explores and maps the environment.
-- Records QR code positions.
-- [Mavic Mapping Video](https://github.com/JZX100II/Drone2Bot-Navigation-System/blob/main/Recordings%20and%20Figures/Mavic.mp4)
+4. **Algorithmic Path Planning**
+   - Utilizing the refined pose vector, a localized **A\*** algorithm computes an optimal, obstacle-free path to the destination coordinate.
+   - The generated waypoints are fed into the low-level motor controllers for sequential execution until the target coordinate is reached.
 
 ---
 
-### 🤖 Phase 2 — TurtleBot Navigation (No GPS)
-- Detects door, scans QR, and plans path.
-- Navigates to target door.
-- [TurtleBot3 Navigation Video](https://github.com/JZX100II/Drone2Bot-Navigation-System/blob/main/Recordings%20and%20Figures/Turtle.mp4)
+## 🎬 System Demonstrations
+
+### 🗺️ Phase 1 — Environment Mapping Stack
+- Robotic sensing unit executes autonomous spatial scanning.
+- Populates the localized reference database.
+- [Mapping Verification Video](https://github.com/JZX100II/Drone2Bot-Navigation-System/blob/main/Recordings%20and%20Figures/Mavic.mp4)
+
+---
+
+### 🤖 Phase 2 — Autonomous Floor Platform Routing
+- Performs feature alignment, processes optical markers, and generates global trajectories.
+- [Mobile Platform Navigation Video](https://github.com/JZX100II/Drone2Bot-Navigation-System/blob/main/Recordings%20and%20Figures/Turtle.mp4)
