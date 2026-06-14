@@ -7,7 +7,7 @@
 This project implements a **two-phase environmental mapping and routing system** that combines **SLAM (Simultaneous Localization and Mapping)**, **optical marker-based localization**, and **A\*** path planning.  
 
 The pipeline coordinates a two-stage terrestrial robotic workflow:
-- 🛒 **Sensing Node (Mavic)** — utilized in *Phase 1* for structural environmental scanning and optical marker detection.  
+- 🛒 **Sensing Node (AGV-S)** — utilized in *Phase 1* for structural environmental scanning and optical marker detection.  
 - 🤖 **Mobile Platform (TurtleBot3)** — utilized in *Phase 2* for closed-loop indoor navigation relying strictly on local computer vision, LiDAR, and localized coordinate updates.
 
 ---
@@ -68,10 +68,10 @@ At the completion of Phase 1:
 ### 🗺️ Phase 1 — Environment Mapping Stack
 - Robotic sensing unit executes autonomous spatial scanning.
 - Populates the localized reference database.
-- [Mapping Verification Video](https://github.com/JZX100II/Drone2Bot-Navigation-System/blob/main/Recordings%20and%20Figures/Mavic.mp4)
+- [Mapping Verification Video](https://github.com/JZX100II/Multi-Agent-Indoor-Navigation/blob/main/Recordings%20and%20Figures/Mavic.mp4)
 
 ---
 
 ### 🤖 Phase 2 — Autonomous Floor Platform Routing
 - Performs feature alignment, processes optical markers, and generates global trajectories.
-- [Mobile Platform Navigation Video](https://github.com/JZX100II/Drone2Bot-Navigation-System/blob/main/Recordings%20and%20Figures/Turtle.mp4)
+- [Mobile Platform Navigation Video](https://github.com/JZX100II/Multi-Agent-Indoor-Navigation/blob/main/Recordings%20and%20Figures/Turtle.mp4)
