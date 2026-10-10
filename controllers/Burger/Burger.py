@@ -159,9 +159,6 @@ class TurtleBot3(Robot):
                 continue  # Skip points beyond max range or invalid
             self.map.append((world_x, world_y))  # Append valid points
     
-    # **************************************************************************************************************************************
-    # dude i can't accept that, lidar and front lidar are picking very two different data, they're not even similar and the door detected in front lidar is pretty far from what it should be
-    # this front_lidar_map data is so curvy i don't get it
     def update_front_lidar_map(self):
         curr_pose = self.kf.x[0], self.kf.x[1]
         yaw = self.imu.getRollPitchYaw()[2]
