@@ -1,8 +1,3 @@
-# also you gotta give the lidar to fully do a 360, cause most of the time, it can't get the whole thing and some parts are missing
-# we can scan qr codes when we first got the full map
-# instead of running it again, now we have all the points in map_lidar_30.txt, write sth that visualize those, also make sure kitchen is taken
-# increase lidar range so that we can have most parts of the map and not be limited to some parts only
-
 import sys
 import cv2
 import math
@@ -103,7 +98,7 @@ class Mavic(Robot):
         with open(f'map_lidar_{self.target_index}.txt', 'w') as f:
             f.write('\n'.join(f'{x},{y}' for x, y in self.map))  # Convert list to string
 
-        print(f"✅ Map saved to map_lidar_{self.target_index}.txt")
+        print(f"Map saved to map_lidar_{self.target_index}.txt")
 
     def limit_speed(self, base_inputs):
         """
@@ -157,34 +152,23 @@ class Mavic(Robot):
         Save the qr_codes dictionary to a JSON file.
         """
         if not hasattr(self, "qr_codes"):
-            print("⚠️ self.qr_codes not found!")
+            print("self.qr_codes not found!")
             return
 
         try:
             with open(filename, "w", encoding="utf-8") as f:
                 json.dump(self.qr_codes, f, indent=4, ensure_ascii=False)
-            print(f"✅ QR codes saved to {os.path.abspath(filename)}")
+            print(f"QR codes saved to {os.path.abspath(filename)}")
         except Exception as e:
-            print(f"❌ Error saving QR codes: {e}")
+            print(f"Error saving QR codes: {e}")
 
     def visualize_map(self):
         if not self.map:
-            print("⚠️ No points in self.map to visualize.")
+            print("No points in self.map to visualize.")
             return
 
         # Extract x and y coordinates from self.map
         x_coords, y_coords = zip(*self.map) if self.map else ([], [])
-
-        # Create a new figure
-        # plt.figure(figsize=(8, 8))
-        # plt.scatter(x_coords, y_coords, c='blue', s=10, label='LIDAR Points')
-        # plt.title(f'LIDAR Map (Waypoint {self.target_index})')
-        # plt.xlabel('X Coordinate (meters)')
-        # plt.ylabel('Y Coordinate (meters)')
-        # plt.grid(True)
-        # plt.legend()
-        # plt.axis('equal')  # Ensure equal scaling for x and y axes
-        # plt.show()
     
     def rotate(self, amount):
         self.yaw_disturbance = amount
@@ -233,7 +217,7 @@ class Mavic(Robot):
 
                 cv2.imwrite(f'qr_detection_{self.target_index}.png', image)
         else:
-            print("⚠️ Failed to read camera image.")
+            print("Failed to read camera image.")
 
     def move_to_target(self, waypoints, verbose_movement=True, verbose_target=True):
         if self.target_position[0:2] == [0, 0]:  # Initialization
@@ -353,8 +337,6 @@ class Mavic(Robot):
             self.front_right_motor.setVelocity(-adjusted_inputs[1])
             self.rear_left_motor.setVelocity(-adjusted_inputs[2])
             self.rear_right_motor.setVelocity(adjusted_inputs[3])
-
-            #     map_complete = True
 
             self.scan_qr_codes()
             # if map_complete and not hasattr(self, 'qr_scanned'):

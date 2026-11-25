@@ -168,8 +168,7 @@ goal_real = (-2.03, -8.22)
 # goal_real = (-0.91, -6.7)
 
 planner = AStarPlanner()
-points = planner.load_points(r"C:\Robotics Final Project Git In Progress\controllers\mavic_lidar_map\map_lidar_2m_full_map_final_version.txt")
-# points = planner.load_points(r"C:\Robotics Final Project Git In Progress\controllers\Map Points\map_lidar_mavic.txt")
+points = planner.load_points(r"../mavic_lidar_map/map_lidar_2m_full_map_final_version.txt")
 grid, min_x, min_y = planner.build_grid(points)
 path = planner.a_star(start_real, goal_real)
 

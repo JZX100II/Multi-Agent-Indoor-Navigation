@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from pathlib import Path
 
 def load_points(file_path):
     map_points = []
@@ -42,7 +43,7 @@ def find_doors(points, axis='horizontal', gap_min=0.65, gap_max=0.9, step=0.05, 
     return doors
 
 if __name__ == '__main__':
-    file_path = r"C:\Robotic Project\Another One\controllers\Burger\temps\map_lidar.txt"
+    file_path = Path("controllers") / "Burger" / "temps" / "map_lidar.txt"
     points = load_points(file_path)
     print(points[:1])
 

@@ -22,7 +22,7 @@ def analyze_door_image(image_path):
     cv2.namedWindow("Door Image")
     cv2.setMouseCallback("Door Image", pick_color, hsv)
 
-    print("👉 Click on the white part of the door to collect HSV values (press 'q' when done).")
+    print("Click on the white part of the door to collect HSV values (press 'q' when done).")
 
     while True:
         cv2.imshow("Door Image", image)
@@ -47,4 +47,4 @@ def analyze_door_image(image_path):
     return hsv_min, hsv_max
 
 # Example usage:
-hsv_min, hsv_max = analyze_door_image(r"C:\Robotics Final Project Git In Progress\controllers\Burger\qr_detection_10.png")
+hsv_min, hsv_max = analyze_door_image(r"qr_detection_0.png")

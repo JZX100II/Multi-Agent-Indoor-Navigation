@@ -1,8 +1,3 @@
-# also you gotta give the lidar to fully do a 360, cause most of the time, it can't get the whole thing and some parts are missing
-# we can scan qr codes when we first got the full map
-# instead of running it again, now we have all the points in map_lidar_30.txt, write sth that visualize those, also make sure kitchen is taken
-# increase lidar range so that we can have most parts of the map and not be limited to some parts only
-
 import sys
 import cv2
 import math
@@ -99,7 +94,7 @@ class Mavic(Robot):
         with open(f'map_lidar_{self.target_index}.txt', 'w') as f:
             f.write('\n'.join(f'{x},{y}' for x, y in self.map))  # Convert list to string
 
-        print(f"✅ Map saved to map_lidar_{self.target_index}.txt")
+        print(f"Map saved to map_lidar_{self.target_index}.txt")
 
     def limit_speed(self, base_inputs):
         """
@@ -150,7 +145,7 @@ class Mavic(Robot):
 
     def visualize_map(self):
         if not self.map:
-            print("⚠️ No points in self.map to visualize.")
+            print("No points in self.map to visualize.")
             return
 
         # Extract x and y coordinates from self.map
@@ -214,7 +209,7 @@ class Mavic(Robot):
 
                 cv2.imwrite(f'qr_detection_{self.target_index}.png', image)
         else:
-            print("⚠️ Failed to read camera image.")
+            print("Failed to read camera image.")
 
     def move_to_target(self, waypoints, verbose_movement=True, verbose_target=True):
         if self.target_position[0:2] == [0, 0]:  # Initialization
@@ -234,7 +229,7 @@ class Mavic(Robot):
             self.just_reached = True
             self.target_index += 1
             
-            # circular: 
+            # circular:
             # if self.target_index > len(waypoints) - 1:
             #     self.target_index = 0
 

@@ -18,7 +18,7 @@ def detect_door_white(image, tolerance=5):
     # Find contours
     contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     if not contours:
-        print("❌ No door detected")
+        print("No door detected")
         return None, mask, image
 
     # Largest contour = door
@@ -26,11 +26,11 @@ def detect_door_white(image, tolerance=5):
     x, y, w, h = cv2.boundingRect(c)
 
     cv2.rectangle(image, (x, y), (x + w, y + h), (0, 255, 0), 2)
-    print(f"✅ Door detected at (x={x}, y={y}, w={w}, h={h})")
+    print(f"Door detected at (x={x}, y={y}, w={w}, h={h})")
 
     return (x, y, w, h), mask, image
 
-# image_path = r"C:\Robotics Final Project Git In Progress\controllers\Burger\qr_detection_10.png"
+# image_path = r"qr_detection_10.png"
 # image = cv2.imread(image_path)
 
 # bbox, mask, output = detect_door_white(image, tolerance=5)

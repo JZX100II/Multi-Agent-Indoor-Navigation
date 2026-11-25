@@ -28,9 +28,9 @@ def load_points(file_path):
                 map_points.append([x, y])
         print(f"Loaded {len(map_points)} points from {file_path}")
     except FileNotFoundError:
-        print(f"⚠️ File not found: {file_path}")
+        print(f"File not found: {file_path}")
     except ValueError:
-        print(f"⚠️ Invalid data format in {file_path}")
+        print(f"Invalid data format in {file_path}")
 
 def initialize_ekf():
     ekf = ExtendedKalmanFilter(dim_x=3, dim_z=2)  # State: [x, y, theta], Measurement: [dx, dy]
@@ -583,7 +583,7 @@ class TurtleBot3(Robot):
                 print("Current pose: ", self.pose)
                 
                 if arrived:
-                    print("✅ Reached goal:", self.target_goal)
+                    print("Reached goal:", self.target_goal)
                     self.room_centered = True
                     self.target_goal = None  # Reset to avoid re-navigation
 
@@ -662,7 +662,7 @@ class TurtleBot3(Robot):
             #     print("Current pose: ", self.pose)
                 
             #     if arrived:
-            #         print("✅ Reached goal:", self.target_goal)
+            #         print("Reached goal:", self.target_goal)
             #         self.target_goal = None  # Reset to avoid re-navigation
 
             self.go_straight_out_of_the_room()
@@ -700,7 +700,7 @@ class TurtleBot3(Robot):
     def plan_path(self):
         checkpoints = self.get_best_path()
         if not checkpoints:
-            print("❌ Could not compute path.")
+            print("Could not compute path.")
             return
 
         checkpoint_index = 0
